@@ -1,8 +1,10 @@
 #!/bin/sh
 
+# apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall
+
 OPENSSL_VER='1.1.0c'
 NPS_VER='1.12.34.2'
-NGINX_VER='1.11.12'
+NGINX_VER='1.13.0'
 
 cd /opt
 wget -c https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
