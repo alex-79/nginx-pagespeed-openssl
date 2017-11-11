@@ -82,5 +82,7 @@ WantedBy=multi-user.target
 EOF
 
 mkdir -p /var/cache/nginx
+mkdir -p /var/log/nginx
 
+systemctl enable nginx.service
 
