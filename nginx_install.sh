@@ -1,23 +1,26 @@
 #!/bin/sh
 
-# apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall
+apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall
 
-OPENSSL_VER='1.1.0c'
-NPS_VER='1.12.34.2'
-NGINX_VER='1.13.0'
+OPENSSL_VER=1.1.0g
+NPS_VER=1.12.34.3-stable
+NGINX_VER=1.13.8
 
 cd /opt
 wget -c https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
 tar -xzvf openssl-$OPENSSL_VER.tar.gz
 rm openssl-$OPENSSL_VER.tar.gz
 
-wget https://github.com/pagespeed/ngx_pagespeed/archive/v$NPS_VER-beta.zip
-unzip v$NPS_VER-beta.zip
-rm v$NPS_VER-beta.zip
-cd ngx_pagespeed-$NPS_VER-beta/
-wget https://dl.google.com/dl/page-speed/psol/$NPS_VER-x64.tar.gz
-tar -xzvf $NPS_VER-x64.tar.gz
-rm $NPS_VER-x64.tar.gz
+wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VER}.zip
+unzip v${NPS_VER}.zip
+rm v${NPS_VER}.zip
+NPS_DIR=$(find . -name "*pagespeed-ngx-${NPS_VER}" -type d | sed -e 's/\.\///g')
+cd $NPS_DIR
+
+[ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+wget ${psol_url}
+tar -xzvf $(basename ${psol_url})
+rm $(basename ${psol_url})
 
 cd /opt
 wget -qO- http://nginx.org/download/nginx-$NGINX_VER.tar.gz | tar zxf -
@@ -54,7 +57,7 @@ cd nginx-$NGINX_VER
  --with-http_slice_module \
  --with-http_stub_status_module \
  --with-openssl=/opt/openssl-$OPENSSL_VER \
- --add-module=/opt/ngx_pagespeed-$NPS_VER-beta 
+ --add-module=/opt/$NPS_DIR
 
 make -j `nproc`
 
@@ -67,7 +70,6 @@ cat > /lib/systemd/system/nginx.service << EOF
 [Unit]
 Description=The NGINX HTTP and reverse proxy server
 After=syslog.target network.target remote-fs.target nss-lookup.target
-
 [Service]
 Type=forking
 PIDFile=/run/nginx.pid
@@ -76,7 +78,6 @@ ExecStart=/usr/sbin/nginx
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s QUIT $MAINPID
 PrivateTmp=true
-
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -85,4 +86,3 @@ mkdir -p /var/cache/nginx
 mkdir -p /var/log/nginx
 
 systemctl enable nginx.service
-
