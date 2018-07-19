@@ -1,10 +1,10 @@
 #!/bin/sh
 
-apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall
+apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall git uuid-dev
 
-OPENSSL_VER=1.1.0g
+OPENSSL_VER=1.1.0h
 NPS_VER=1.12.34.3-stable
-NGINX_VER=1.13.8
+NGINX_VER=1.14.0
 
 cd /opt
 wget -c https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
@@ -21,6 +21,10 @@ cd $NPS_DIR
 wget ${psol_url}
 tar -xzvf $(basename ${psol_url})
 rm $(basename ${psol_url})
+
+cd /opt
+git clone https://github.com/google/ngx_brotli
+cd /opt/ngx_brotli && git submodule update --init
 
 cd /opt
 wget -qO- http://nginx.org/download/nginx-$NGINX_VER.tar.gz | tar zxf -
@@ -57,7 +61,8 @@ cd nginx-$NGINX_VER
  --with-http_slice_module \
  --with-http_stub_status_module \
  --with-openssl=/opt/openssl-$OPENSSL_VER \
- --add-module=/opt/$NPS_DIR
+ --add-module=/opt/$NPS_DIR \
+ --add-module=/opt/ngx_brotli
 
 make -j `nproc`
 
