@@ -1,2 +1,2 @@
-# nginx-pagespeed-openssl
-nginx+pagespeed+openssl
+# nginx-pagespeed-openssl-brotli
+nginx+pagespeed+openssl+brotli
