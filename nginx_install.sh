@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall git uuid-dev
+apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall git uuid-dev libgeoip-dev
 
 OPENSSL_VER=1.1.0h
 NPS_VER=1.12.34.3-stable
