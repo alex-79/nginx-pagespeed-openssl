@@ -4,7 +4,7 @@ apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev
 
 OPENSSL_VER=1.1.0h
 NPS_VER=1.12.34.3-stable
-NGINX_VER=1.14.0
+NGINX_VER=1.14.1
 
 cd /opt
 wget -c https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
@@ -46,11 +46,11 @@ cd nginx-$NGINX_VER
  --without-http_ssi_module \
  --without-http_scgi_module \
  --without-http_uwsgi_module \
- --without-http_geo_module \
  --without-http_split_clients_module \
  --without-http_memcached_module \
  --without-http_empty_gif_module \
  --without-http_browser_module \
+ --with-http_geoip_module \
  --with-threads \
  --with-file-aio \
  --with-http_ssl_module \
