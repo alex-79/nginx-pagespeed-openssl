@@ -2,9 +2,9 @@
 
 apt-get install build-essential ca-certificates zlib1g-dev libpcre3 libpcre3-dev tar unzip libssl-dev checkinstall git uuid-dev libgeoip-dev
 
-OPENSSL_VER=1.1.0h
+OPENSSL_VER=1.1.0k
 NPS_VER=1.12.34.3-stable
-NGINX_VER=1.14.1
+NGINX_VER=1.17.1
 
 cd /opt
 wget -c https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
